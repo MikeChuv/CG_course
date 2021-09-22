@@ -9,8 +9,7 @@ from sys import exit
 
 rot_x = rot_y = rot_z = 0
 # Вращение
-n_rot, da = 0, 5
-#
+n_rot = 0
 
 R = 30 # Радиус окружности (для построения треугольника)
 h = R // 5 # Половина длины ребра куба
@@ -103,13 +102,14 @@ window = Window(visible = True, width = width, height = height, resizable = True
 glClearColor(0.1, 0.1, 0.1, 1.0)
 glClear(GL_COLOR_BUFFER_BIT)
 glEnable(GL_DEPTH_TEST)
-glDepthFunc(GL_LESS)
+glDepthFunc(GL_LEQUAL)
+glEnable(GL_CULL_FACE)
 
 
 def update(dt):
     global rot_z, n_rot
     rot_z += 1
-    #n_rot += 1
+    n_rot += 1
 
 pyglet.clock.schedule_interval(update, 1/60)
 
