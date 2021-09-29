@@ -11,9 +11,6 @@ width, height = int(30 * wx), int(30 * wy)
 window = Window(visible = True, width = width, height = height, resizable = True)
 glClearColor(0.4, 0.4, 0.4, 1.0)
 glClear(GL_COLOR_BUFFER_BIT)
-glEnable(GL_TEXTURE_GEN_S)
-glEnable(GL_TEXTURE_GEN_T)
-#glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR)
 py = 0
 
 def texInit():
@@ -36,8 +33,8 @@ def texInit():
 	glEnable(p)
 
 texInit()
-zv = -d2
-v0, v1, v2, v3 = (-d2,d2, 0), (-d1,d1,0), (d1,d1,0), (d2,d2,0)
+zv = -d2/2
+v0, v1, v2, v3 = (-d2,d2, 0), (-d1,d1,zv), (d1,d1,zv), (d2,d2,0)
 
 
 def update(dt):
@@ -50,7 +47,8 @@ def update(dt):
 
 #pyglet.clock.schedule_interval(update, 1/60)
 
-glPointSize(16)
+tScale = 3 # d2 / (d2 - d1)
+xoff = tScale / 6
 
 @window.event
 def on_draw():
@@ -63,7 +61,6 @@ def on_draw():
 	glRotatef(py, 1, 0, 0)
 	graphics.draw(4, GL_POLYGON,
 				  ('v3f', (v0 + v1 + v2 + v3)),
-				  ('t2f', (0,2, 0,0, 2,0, 2,2)))
-	graphics.draw(1, GL_POINTS, ('v3f', (v1)), ('c3f', (1, 0, 0)))
+				  ('t2f', (0,tScale, xoff,0, tScale - xoff,0, tScale,tScale)))
 
 app.run()
