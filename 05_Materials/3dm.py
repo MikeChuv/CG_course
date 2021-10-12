@@ -58,9 +58,7 @@ def compute_normal(com, a, b, onorm):
     evec1, evec2 = a - com1, b - com1
     vnorm = np.cross(evec1, evec2)
     if onorm: vnorm = vnorm / np.linalg.norm(vnorm)
-    vnorm_end = com1 + vnorm
-    vnorm_line = list(vnorm_end) + com
-    return vnorm, vnorm_line
+    return vnorm
 
 
 # возвращает список нормалей к вершинам b
@@ -69,9 +67,9 @@ def vertex_normals(b, t, onorm):
     na = np.zeros((n, 3))
     nl = []
     for i in range(n):
-        n1,_ = compute_normal(b[i], b[(i+1)%n], t[(n-i)%n], onorm)
-        n2,_ = compute_normal(b[i], b[(i+n-1)%n], b[(i+1)%n], onorm)
-        n3,_ = compute_normal(b[i], t[(n-i)%n], b[(i+n-1)%n], onorm)
+        n1 = compute_normal(b[i], b[(i+1)%n], t[(n-i)%n], onorm)
+        n2 = compute_normal(b[i], b[(i+n-1)%n], b[(i+1)%n], onorm)
+        n3 = compute_normal(b[i], t[(n-i)%n], b[(i+n-1)%n], onorm)
         nnorm = n1 + n2 + n3
         if onorm: nnorm = nnorm / np.linalg.norm(nnorm)
         na[i] = nnorm
@@ -147,7 +145,7 @@ def faces(n, norm):
     for i in range(n):
         svl = (lid_bottom[i] , lid_bottom[(i+1)%n] , lid_top[n-1-i] , lid_top[(n-i)%n])
         snl = (norms_bottom[i] , norms_bottom[(i+1)%n] , norms_top[n-1-i] , norms_top[(n-i)%n])
-        sn,_ = compute_normal(svl[0], svl[1], svl[3], outer_normalize)
+        sn = compute_normal(svl[0], svl[1], svl[3], outer_normalize)
         glBegin(GL_QUADS)
         for j, v in enumerate(svl):
             glColor3f(1, 0, 0)
