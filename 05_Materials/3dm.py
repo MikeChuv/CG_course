@@ -168,7 +168,7 @@ def on_draw():
     glDisable(GL_CULL_FACE) if culling else glEnable(GL_CULL_FACE)
     glEnable(GL_NORMALIZE) if inner_normalize else glDisable(GL_NORMALIZE)
     glEnable(GL_LIGHT1) if light1 else glDisable(GL_LIGHT1)
-    glMaterialfv(GL_FRONT, GL_DIFFUSE, mtClr0) if diffuse else glMaterialfv(GL_FRONT, GL_DIFFUSE, (GLfloat * 4)(0, 0, 0, 1.0))
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, mtClr0) if diffuse else glMaterialfv(GL_FRONT, GL_AMBIENT, mtClr0)
 
     draw_light_sources()
     draw_coord_lines()
@@ -240,9 +240,12 @@ def rotate(dt):
     global tz, time, light_position0L
     glRotatef(0.5, tz / 20, 0, 0)
     time += dt
-    light_position0L = [40*np.cos(time), 40*np.sin(time), 4, 0] # Позиция источника света
+    glPushMatrix()
+    glLoadIdentity()
+    light_position0L = [40*np.cos(time), -40*np.sin(time), 40, 0] # Позиция источника света
     light_position0 = (GLfloat * 4)(*light_position0L)
     glLightfv(GL_LIGHT0, GL_POSITION, light_position0)
+    glPopMatrix()
 
 
 if __name__ == "__main__":
@@ -251,7 +254,7 @@ if __name__ == "__main__":
     glDepthFunc(GL_LESS) # GL_LESS GL_GREATER
 
     glEnable(GL_LIGHTING)
-    glMaterialfv(GL_FRONT, GL_DIFFUSE, mtClr0)
+    #glMaterialfv(GL_FRONT, GL_DIFFUSE, mtClr0)
     glLightfv(GL_LIGHT0, GL_POSITION, light_position0)
     glLightfv(GL_LIGHT0, GL_DIFFUSE, lghtClr0)
     glEnable(GL_LIGHT0)
